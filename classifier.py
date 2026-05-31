@@ -12,4 +12,14 @@ def classify(A, b):
     Returns:
         str: 'one', 'none', or 'infinite'
     """
-    pass
+    augmented = np.column_stack((A, b))
+    rank_A = np.linalg.matrix_rank(A)
+    rank_aug = np.linalg.matrix_rank(augmented)
+    num_vars = A.shape[1]
+
+    if rank_A != rank_aug:
+        return 'none'
+    elif rank_A == rank_aug == num_vars:
+        return 'one'
+    else:
+        return 'infinite'

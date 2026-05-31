@@ -10,7 +10,26 @@ def build_matrix(system):
     Returns:
         tuple: (np.ndarray, np.ndarray, list[str]) -> (A, b, variable_order)
     """
-    pass
+    # collect all unique variables across all equations
+    var_order = []
+    for coeffs, _ in system:
+        for var in coeffs:
+            if var not in var_order:
+                var_order.append(var)
+
+    num_equations = len(system)
+    num_vars = len(var_order)
+
+    A = np.zeros((num_equations, num_vars))
+    b = np.zeros(num_equations)
+
+    for i, (coeffs, constant) in enumerate(system):
+        b[i] = constant
+        for var, coeff in coeffs.items():
+            j = var_order.index(var)
+            A[i][j] = coeff
+
+    return A, b, var_order
 
 
 def solve(A, b):
@@ -23,4 +42,7 @@ def solve(A, b):
     Returns:
         np.ndarray: solution vector, or None if singular
     """
-    pass
+    try:
+        return np.linalg.solve(A, b)
+    except np.linalg.LinAlgError:
+        return None
