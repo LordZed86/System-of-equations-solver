@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Tests](https://img.shields.io/badge/tests-pytest-orange.svg)
+![Tests](https://github.com/LordZed86/System-of-equations-solver/actions/workflows/tests.yml/badge.svg)
 
 A command-line tool for solving systems of linear equations from a plain text file. Supports multiple systems per file, handles overdetermined and underdetermined systems, detects unique, infinite, and no-solution cases, and reports variable values with color-coded output.
 
