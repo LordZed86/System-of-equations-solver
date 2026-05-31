@@ -93,3 +93,13 @@ def test_solve_three_variables():
     b = np.array([8.0, -11.0, -3.0])
     result = solve(A, b)
     assert np.allclose(result, [2.0, 3.0, -1.0])
+
+def test_solve_overdetermined():
+    """overdetermined but consistent system should return a solution"""
+    A = np.array([[1.0, 1.0],
+                  [2.0, 1.0],
+                  [1.0, -1.0]])
+    b = np.array([3.0, 5.0, 1.0])
+    result = solve(A, b)
+    assert result is not None
+    assert np.allclose(A @ result, b)

@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Tests](https://img.shields.io/badge/tests-pytest-orange.svg)
 
-A command-line tool for solving systems of linear equations from a text file. Supports multiple systems per file, detects unique, infinite, and no-solution cases, and reports variable values with color-coded output.
+A command-line tool for solving systems of linear equations from a plain text file. Supports multiple systems per file, handles overdetermined and underdetermined systems, detects unique, infinite, and no-solution cases, and reports variable values with color-coded output.
 
 ---
 
@@ -13,10 +13,17 @@ A command-line tool for solving systems of linear equations from a text file. Su
 - Parses systems of linear equations from a plain text file
 - Handles multiple systems in a single file
 - Detects and reports one solution, no solution, or infinite solutions
+- Handles overdetermined systems (more equations than unknowns)
+- Handles underdetermined systems (fewer equations than unknowns)
+- Non-invertible/singular matrices are detected via rank comparison before solving — `numpy.linalg.solve` is never called on a singular matrix
 - Supports any single-letter lowercase variables (`a`–`z`)
 - Supports integer and decimal coefficients (e.g., `2.5x + 1.5y = 5`)
+- Handles duplicate variables in one equation (e.g., `x + 2x + y = 3` → `3x + y = 3`)
+- Handles zero coefficients (e.g., `0x + 2y = 4`)
+- Filters empty systems from double semicolons or trailing semicolons
 - Color-coded terminal output for easy reading
 - Verbose mode (`-v`) that displays the augmented matrix before solving
+- Fraction mode (`-f`) that displays solutions as exact fractions instead of decimals
 - Descriptive error messages for malformed input
 
 ---
@@ -46,14 +53,16 @@ python main.py <input_file>
 
 ```bash
 linear-solver <input_file>
-linear-solver -v <input_file>    # verbose mode — shows augmented matrix
+linear-solver -v <input_file>       # verbose — shows augmented matrix
+linear-solver -f <input_file>       # fraction output — exact answers
+linear-solver -v -f <input_file>    # combine flags
 ```
 
 Or without installing:
 
 ```bash
 python main.py <input_file>
-python main.py -v <input_file>
+python main.py -v -f <input_file>
 ```
 
 ---
@@ -98,6 +107,17 @@ System 3:
 ----------------------------------------
 ```
 
+Fraction output (`-f`):
+
+```
+========================================
+System 1:
+  One solution:
+    x = 14/11
+    y = 9/11
+----------------------------------------
+```
+
 Verbose output (`-v`):
 
 ```
@@ -128,31 +148,38 @@ System 1:
 pytest tests/ -v
 ```
 
-Test fixtures are located in `tests/fixtures/` and include:
-- `simple.txt` — single system, one solution
-- `two_systems.txt` — two systems, one solution each
-- `decimals.txt` — decimal coefficients
-- `no_solution.txt` — contradictory system
-- `infinite_solutions.txt` — underdetermined system
-- `mixed.txt` — 10 systems covering all cases
+Test fixtures are located in `tests/fixtures/` and cover:
+
+| Fixture | Description |
+|---|---|
+| `simple.txt` | Single system, one solution |
+| `two_systems.txt` | Two systems, one solution each |
+| `decimals.txt` | Decimal coefficients |
+| `no_solution.txt` | Contradictory system (singular matrix) |
+| `infinite_solutions.txt` | Underdetermined system |
+| `overdetermined.txt` | More equations than unknowns |
+| `mixed.txt` | 10 systems covering all cases |
+| `parser_edge_cases.txt` | Zero coefficients, duplicate variables, extra whitespace |
+| `multi_edge_cases.txt` | Double semicolons, trailing semicolons |
 
 ---
 
 ## How It Works
 
-1. The input file is read and split on `;` to separate systems
+1. The input file is read and split on `;` to separate systems; empty entries are filtered
 2. Each system is split on `,` to get individual equations
-3. Equations are tokenized and parsed into coefficient dictionaries
-4. An augmented matrix `[A|b]` is constructed for each system
-5. The rank of `A` and `[A|b]` are compared to classify the system — this handles non-invertible matrices without calling `numpy.linalg.solve` on a singular matrix
-6. If exactly one solution exists, `numpy.linalg.solve` is called
-7. Results are printed for each system with color-coded output
+3. Equations are tokenized and parsed into coefficient dictionaries; duplicate variables are summed
+4. An augmented matrix `[A|b]` is constructed for each system; missing variables get a 0 coefficient
+5. The rank of `A` and `[A|b]` are compared — this handles non-invertible matrices without ever calling `numpy.linalg.solve` on a singular matrix
+6. Overdetermined systems (more equations than unknowns) use `numpy.linalg.lstsq` instead of `numpy.linalg.solve`
+7. If exactly one solution exists, the appropriate solver is called
+8. Results are printed for each system with color-coded output
 
 ---
 
 ## Project Structure
 
-```Plaintext
+```
 linear_solver/
 ├── main.py           # Entry point, CLI, and color output
 ├── parser.py         # File and equation parsing
@@ -170,7 +197,10 @@ linear_solver/
         ├── decimals.txt
         ├── no_solution.txt
         ├── infinite_solutions.txt
-        └── mixed.txt
+        ├── overdetermined.txt
+        ├── mixed.txt
+        ├── parser_edge_cases.txt
+        └── multi_edge_cases.txt
 ```
 
 ---

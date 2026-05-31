@@ -35,6 +35,7 @@ def build_matrix(system):
 def solve(A, b):
     """
     Attempt to solve the system Ax = b using numpy.
+    Uses lstsq for overdetermined systems.
 
     Args:
         A (np.ndarray): coefficient matrix
@@ -43,6 +44,10 @@ def solve(A, b):
         np.ndarray: solution vector, or None if singular
     """
     try:
+        num_equations, num_vars = A.shape
+        if num_equations != num_vars:
+            solution, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+            return solution
         return np.linalg.solve(A, b)
     except np.linalg.LinAlgError:
         return None

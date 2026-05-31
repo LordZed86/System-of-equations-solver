@@ -12,11 +12,17 @@ def classify(A, b):
     Returns:
         str: 'one', 'none', or 'infinite'
     """
+    num_equations, num_vars = A.shape
     augmented = np.column_stack((A, b))
     rank_A = np.linalg.matrix_rank(A)
     rank_aug = np.linalg.matrix_rank(augmented)
-    num_vars = A.shape[1]
 
+    # overdetermined system — more equations than unknowns
+    if num_equations > num_vars:
+        if rank_A == rank_aug == num_vars:
+            return 'one'
+        return 'none'
+    # rank comparison handles non-invertible matrices without calling numpy.linalg.solve
     if rank_A != rank_aug:
         return 'none'
     elif rank_A == rank_aug == num_vars:
