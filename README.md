@@ -32,20 +32,21 @@ A command-line tool for solving systems of linear equations from a plain text fi
 
 **Requirements:** Python 3.11+, NumPy
 
-Clone the repo and install:
+**Quick install:**
+
+```bash
+pip install git+https://github.com/LordZed86/System-of-equations-solver.git
+```
+
+**Or clone and install locally:**
 
 ```bash
 git clone https://github.com/LordZed86/System-of-equations-solver.git
-cd linear-solver
-pip install -e .
+cd System-of-equations-solver
+pip install .
 ```
 
-Or install dependencies manually and run directly:
-
-```bash
-pip install numpy
-python main.py <input_file>
-```
+Once installed, the `linear-solver` command is available from anywhere in your terminal.
 
 ---
 
