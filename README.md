@@ -35,7 +35,7 @@ A command-line tool for solving systems of linear equations from a plain text fi
 Clone the repo and install:
 
 ```bash
-git clone https://github.com/yourusername/linear-solver.git
+git clone https://github.com/LordZed86/System-of-equations-solver.git
 cd linear-solver
 pip install -e .
 ```
