@@ -151,17 +151,17 @@ pytest tests/ -v
 
 Test fixtures are located in `tests/fixtures/` and cover:
 
-| Fixture | Description |
-|---|---|
-| `simple.txt` | Single system, one solution |
-| `two_systems.txt` | Two systems, one solution each |
-| `decimals.txt` | Decimal coefficients |
-| `no_solution.txt` | Contradictory system (singular matrix) |
-| `infinite_solutions.txt` | Underdetermined system |
-| `overdetermined.txt` | More equations than unknowns |
-| `mixed.txt` | 10 systems covering all cases |
-| `parser_edge_cases.txt` | Zero coefficients, duplicate variables, extra whitespace |
-| `multi_edge_cases.txt` | Double semicolons, trailing semicolons |
+| Fixture                  | Description                                              |
+|--------------------------|----------------------------------------------------------|
+| `simple.txt`             | Single system, one solution                              |
+| `two_systems.txt`        | Two systems, one solution each                           |
+| `decimals.txt`           | Decimal coefficients                                     |
+| `no_solution.txt`        | Contradictory system (singular matrix)                   |
+| `infinite_solutions.txt` | Underdetermined system                                   |
+| `overdetermined.txt`     | More equations than unknowns                             |
+| `mixed.txt`              | 10 systems covering all cases                            |
+| `parser_edge_cases.txt`  | Zero coefficients, duplicate variables, extra whitespace |
+| `multi_edge_cases.txt`   | Double semicolons, trailing semicolons                   |
 
 ---
 
