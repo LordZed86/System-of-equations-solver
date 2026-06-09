@@ -1,5 +1,7 @@
 import sys
 import numpy as np
+import os
+import glob
 from fractions import Fraction
 from parser import parse_all
 from solver import build_matrix, solve
@@ -38,10 +40,21 @@ def run(filepath=None, verbose=False, fraction=False):
         fraction = "-f" in args
         args = [a for a in args if a != "-v" and a != "-f"]
 
-        if len(args) != 1:
-            print("Usage: linear-solver [-v] [-f] <input_file>")
+        if len(args) == 1:
+            filepath = args[0]
+        elif len(args) == 0:
+            # check default input/ directory
+            input_files = glob.glob("input/*.txt")
+            if not input_files:
+                print(f"{RED}Error: no input files found in input/ directory.{RESET}")
+                sys.exit(1)
+            for f in sorted(input_files):
+                print(f"\n{GRAY}File: {f}{RESET}")
+                run(filepath=f, verbose=verbose, fraction=fraction)
+            return
+        else:
+            print("Usage: linear-solver [-v] [-f] [input_file]")
             sys.exit(1)
-        filepath = args[0]
 
     try:
         systems = parse_all(filepath)
