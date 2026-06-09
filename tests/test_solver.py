@@ -1,4 +1,3 @@
-import pytest
 import numpy as np
 from solver import build_matrix, solve
 

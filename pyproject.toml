@@ -14,8 +14,8 @@ dependencies = ["numpy>=2.0"]
 [project.scripts]
 linear-solver = "main:run"
 
-[tool.setuptools.packages.find]
-where = ["."]
+[tool.setuptools]
+py-modules = ["main", "parser", "solver", "classifier"]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
