@@ -21,6 +21,7 @@ A command-line tool for solving systems of linear equations from a plain text fi
 - Handles duplicate variables in one equation (e.g., `x + 2x + y = 3` → `3x + y = 3`)
 - Handles zero coefficients (e.g., `0x + 2y = 4`)
 - Filters empty systems from double semicolons or trailing semicolons
+- Default `input/` directory — drop `.txt` files in and run `linear-solver` with no arguments
 - Color-coded terminal output for easy reading
 - Verbose mode (`-v`) that displays the augmented matrix before solving
 - Fraction mode (`-f`) that displays solutions as exact fractions instead of decimals
@@ -32,21 +33,30 @@ A command-line tool for solving systems of linear equations from a plain text fi
 
 **Requirements:** Python 3.11+, NumPy
 
-**Quick install:**
+We recommend installing inside a virtual environment to avoid conflicts with your system Python:
 
+**Mac/Linux:**
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install git+https://github.com/LordZed86/System-of-equations-solver.git
 ```
 
-**Or clone and install locally:**
+**Windows:**
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install git+https://github.com/LordZed86/System-of-equations-solver.git
+```
 
+Once installed, the `linear-solver` command is available in your terminal for as long as the virtual environment is active.
+
+**Or clone and install locally:**
 ```bash
 git clone https://github.com/LordZed86/System-of-equations-solver.git
 cd System-of-equations-solver
 pip install .
 ```
-
-Once installed, the `linear-solver` command is available from anywhere in your terminal.
 
 ---
 
@@ -57,6 +67,7 @@ linear-solver <input_file>
 linear-solver -v <input_file>       # verbose — shows augmented matrix
 linear-solver -f <input_file>       # fraction output — exact answers
 linear-solver -v -f <input_file>    # combine flags
+linear-solver                       # runs all .txt files in input/ directory
 ```
 
 Or without installing:
@@ -65,6 +76,20 @@ Or without installing:
 python main.py <input_file>
 python main.py -v -f <input_file>
 ```
+
+---
+
+## Default Input Directory
+
+If no file is specified, `linear-solver` will automatically run all `.txt` files found in an `input/` directory in your current working directory:
+
+```bash
+mkdir input
+# add your equation files to input/
+linear-solver
+```
+
+This makes it easy to batch-run multiple input files without specifying paths.
 
 ---
 
@@ -188,6 +213,7 @@ linear_solver/
 ├── classifier.py     # Solution classification (one/none/infinite)
 ├── pyproject.toml    # Package config and CLI entry point
 ├── requirements.txt  # Dependencies
+├── input/            # Default input directory (add .txt files here)
 └── tests/
     ├── test_parser.py
     ├── test_solver.py
