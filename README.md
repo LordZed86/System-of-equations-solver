@@ -58,6 +58,12 @@ cd System-of-equations-solver
 pip install .
 ```
 
+To exit the virtual environment when you are done:
+
+```bash
+deactivate
+```
+
 ---
 
 ## Usage
@@ -68,6 +74,15 @@ linear-solver -v <input_file>       # verbose — shows augmented matrix
 linear-solver -f <input_file>       # fraction output — exact answers
 linear-solver -v -f <input_file>    # combine flags
 linear-solver                       # runs all .txt files in input/ directory
+```
+
+replace <input_file> with the path to your file
+
+example:
+
+```bash
+linear-solver ~/Desktop/equations.txt
+linear-solver /Users/username/Documents/hw/problem_set.txt
 ```
 
 Or without installing:
